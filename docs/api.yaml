@@ -1,0 +1,348 @@
+openapi: 3.0.0
+info:
+  title: "Box API"
+  version: "1.0.0"
+paths:
+  /authentication/login:
+    post:
+      tags:
+        - "Authentication"
+      summary: "Authenticate"
+      description: "Authenticate"
+      requestBody:
+        description: "User"
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/Authentication"
+      responses:
+        200:
+          description: "Success"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Token"
+  /authentication/logout:
+    post:
+      tags:
+        - "Authentication"
+      summary: "Logout"
+      description: "Logout"
+      security:
+        - bearerAuth: []
+      responses:
+        200:
+          description: "Success"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Token"
+
+  /user/{id}:
+    get:
+      tags:
+        - Users
+      summary: "Get user"
+      description: "Get user"
+      parameters:
+        - name: id
+          in: path
+          description: "User id"
+          required: true
+          schema:
+            type: integer
+            format: int64
+      responses:
+        200:
+          description: "Success"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/User"
+    post:
+      tags:
+        - Users
+      summary: "Create user"
+      description: "Create user"
+      requestBody:
+        description: "User"
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/User"
+      responses:
+        200:
+          description: "Success"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/User"
+    put:
+      tags:
+        - Users
+      summary: "Update user"
+      description: "Update user"
+      parameters:
+        - name: id
+          in: path
+          description: "User id"
+          required: true
+          schema:
+            type: integer
+            format: int64
+      requestBody:
+        description: "User"
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/User"
+      responses:
+        200:
+          description: "Success"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/User"
+    delete:
+      tags:
+        - Users
+      summary: "Delete user"
+      description: "Delete user"
+      parameters:
+        - name: id
+          in: path
+          description: "User id"
+          required: true
+          schema:
+            type: integer
+            format: int64
+      responses:
+        200:
+          description: "Success"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/User"
+
+  /resource/info/{resourceId}:
+    get:
+      tags:
+        - Resources
+      summary: "Get resource info"
+      description: "Get resource info"
+      parameters:
+        - name: resourceId
+          in: path
+          description: "Resource id"
+          required: true
+          schema:
+            type: integer
+            format: int64
+      responses:
+        200:
+          description: "Success"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Resource"
+
+  /resource/data/{resourceId}:
+    get:
+      tags:
+        - Resources
+      summary: "Download raw resource"
+      description: "Download raw resource"
+      parameters:
+        - name: resourceId
+          in: path
+          description: "Resource id"
+          required: true
+          schema:
+            type: integer
+            format: int64
+      responses:
+        200:
+          description: "Success"
+          content:
+            application/octet-stream:
+              schema:
+                type: string
+                format: binary
+    post:
+      tags:
+        - Resources
+      summary: "Upload raw resource"
+      description: "Upload raw resource"
+      parameters:
+        - name: resourceId
+          in: path
+          description: "Resource id"
+          required: true
+          schema:
+            type: integer
+            format: int64
+      requestBody:
+        description: "Resource"
+        required: true
+        content:
+          application/octet-stream:
+            schema:
+              type: string
+              format: binary
+      responses:
+        200:
+          description: "Success"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Resource"
+
+  /settings/global:
+    get:
+      tags:
+        - Settings
+      summary: "Get global settings"
+      description: "Get global settings"
+      responses:
+        200:
+          description: "Success"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/GlobalSettings"
+    put:
+      tags:
+        - Settings
+      summary: "Update global settings"
+      description: "Update global settings"
+      requestBody:
+        description: "Global settings"
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/GlobalSettings"
+      responses:
+        200:
+          description: "Success"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/GlobalSettings"
+
+  /settings/user/{userId}:
+    get:
+      tags:
+        - Settings
+      summary: "Get user settings"
+      description: "Get user settings"
+      parameters:
+        - name: userId
+          in: path
+          description: "User id"
+          required: true
+          schema:
+            type: integer
+            format: int64
+      responses:
+        200:
+          description: "Success"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/UserSettings"
+    put:
+      tags:
+        - Settings
+      summary: "Update user settings"
+      description: "Update user settings"
+      parameters:
+        - name: userId
+          in: path
+          description: "User id"
+          required: true
+          schema:
+            type: integer
+            format: int64
+      requestBody:
+        description: "User settings"
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/UserSettings"
+      responses:
+        200:
+          description: "Success"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/UserSettings"
+components:
+  schemas:
+    User:
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int64
+        username:
+          type: string
+        active:
+          type: boolean
+        createdAt:
+          type: string
+          format: date-time
+        updatedAt:
+          type: string
+          format: date-time
+    Authentication:
+      type: object
+      properties:
+        username:
+          type: string
+        password:
+          type: string
+    Token:
+      type: object
+      properties:
+        token:
+          type: string
+        user:
+          $ref: "#/components/schemas/User"
+    Resource:
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int64
+        name:
+          type: string
+        path:
+          type: string
+        size:
+          type: integer
+          format: int64
+        type:
+          type: string
+        createdAt:
+          type: string
+          format: date-time
+        updatedAt:
+          type: string
+          format: date-time
+    GlobalSettings:
+      type: object
+      properties:
+        updatedAt:
+          type: string
+          format: date-time
+    UserSettings:
+      type: object
+      properties:
+        updatedAt:
+          type: string
+          format: date-time
